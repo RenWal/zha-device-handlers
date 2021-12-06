@@ -39,6 +39,7 @@ from zhaquirks.const import (
 )
 from zhaquirks.ikea import IKEA, LightLinkCluster, PowerConfiguration1CRCluster
 
+IKEA_CLUSTER_ID = 0xFC7C  # decimal = 64636
 
 class IkeaTradfriShortcutBtn(CustomDevice):
     """Custom device representing IKEA of Sweden TRADFRI shortcut button."""
@@ -115,3 +116,13 @@ class IkeaTradfriShortcutBtn(CustomDevice):
             ENDPOINT_ID: 1,
         },
     }
+    
+class IkeaTradfriShortcutBtnExtraCluster(IkeaTradfriShortcutBtn):
+    """Custom device representing IKEA of Sweden TRADFRI shortcut button,
+       but with the additional manufacturer-specific input cluster present
+       on some devices (regardless of FW version)."""
+    signature = IkeaTradfriShortcutBtn.signature
+    signature[ENDPOINTS][1][INPUT_CLUSTERS].append(IKEA_CLUSTER_ID)
+    
+    replacement = IkeaTradfriShortcutBtn.replacement
+    replacement[ENDPOINTS][1][INPUT_CLUSTERS].append(IKEA_CLUSTER_ID)
